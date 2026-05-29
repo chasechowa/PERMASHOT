@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>连续截图工具 — 产品发布</title>
+<style>
+:root { --accent: #4a9eff; --bg: #f8f9fb; --card: #fff; --text: #2d2d2d; --text-light: #666; --border: #e8ecf1; --shadow: 0 1px 3px rgba(0,0,0,.08); --radius: 10px; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+.container { max-width: 1080px; margin:0 auto; padding:0 24px; }
+
+.hero { background: linear-gradient(135deg, #1a3a5c 0%, #2a5a8c 40%, #4a9eff 100%); color:#fff; text-align:center; padding:80px 24px 64px; }
+.hero h1 { font-size:42px; font-weight:700; margin-bottom:12px; letter-spacing:-.5px; }
+.hero .tagline { font-size:20px; opacity:.9; margin-bottom:28px; }
+.badges { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; }
+.badge { background:rgba(255,255,255,.15); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.2); padding:8px 18px; border-radius:20px; font-size:14px; font-weight:500; }
+
+section { padding:56px 0; }
+section:nth-child(even) { background:#fff; }
+.section-title { font-size:28px; font-weight:700; text-align:center; margin-bottom:40px; color:#1a3a5c; }
+.section-subtitle { text-align:center; color:var(--text-light); margin-top:-32px; margin-bottom:40px; font-size:15px; }
+
+.pain-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
+.pain-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:32px; box-shadow:var(--shadow); }
+.pain-card .icon { font-size:32px; margin-bottom:12px; }
+.pain-card h3 { font-size:18px; margin-bottom:8px; color:#1a3a5c; }
+.pain-card p { font-size:14px; color:var(--text-light); }
+.stats-bar { display:flex; justify-content:center; gap:48px; margin-top:36px; padding:20px 0; border-top:1px solid var(--border); flex-wrap:wrap; }
+.stat { text-align:center; }
+.stat .num { font-size:32px; font-weight:700; color:var(--accent); }
+.stat .label { font-size:13px; color:var(--text-light); }
+
+.positioning { text-align:center; background:linear-gradient(135deg,#f0f5ff,#e8f0fe); padding:48px 24px; border-radius:var(--radius); margin:0 24px; }
+.positioning blockquote { font-size:22px; font-weight:600; color:#1a3a5c; border-left:4px solid var(--accent); padding-left:20px; display:inline-block; text-align:left; }
+
+.feature-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:24px; }
+.feature-item { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px 24px; text-align:center; box-shadow:var(--shadow); transition:transform .2s; }
+.feature-item:hover { transform:translateY(-2px); }
+.feature-icon { font-size:40px; margin-bottom:12px; }
+.feature-item h4 { font-size:16px; margin-bottom:6px; color:#1a3a5c; }
+.feature-item p { font-size:13px; color:var(--text-light); }
+
+.control-bar-diagram { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:32px; box-shadow:var(--shadow); max-width:900px; margin:0 auto; }
+.control-bar-row { display:flex; align-items:center; gap:12px; background:#2d2d2d; padding:8px 12px; border-radius:8px; margin-bottom:24px; flex-wrap:wrap; }
+.control-item { background:#3a3a3a; color:#e0e0e0; padding:6px 12px; border-radius:4px; font-size:13px; white-space:nowrap; }
+.control-item.accent { background:#4a9eff; color:#fff; }
+.control-item.shape { width:32px; height:28px; padding:0; display:flex; align-items:center; justify-content:center; font-size:15px; }
+.control-label { display:flex; gap:6px; align-items:center; color:#aaa; font-size:12px; }
+.control-label span { color:#e0e0e0; }
+.breakdown-list { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+.breakdown-item { padding:12px 16px; border-left:3px solid var(--accent); background:#f8f9fb; border-radius:0 6px 6px 0; }
+.breakdown-item strong { display:block; font-size:14px; margin-bottom:2px; }
+.breakdown-item span { font-size:13px; color:var(--text-light); }
+
+.interface-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
+.interface-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow); }
+.interface-card .icon { font-size:36px; margin-bottom:12px; }
+.interface-card h3 { font-size:18px; margin-bottom:8px; color:#1a3a5c; }
+.interface-card .tag { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; margin-bottom:10px; }
+.interface-card p { font-size:14px; color:var(--text-light); margin-bottom:8px; }
+.interface-card ul { padding-left:18px; font-size:13px; color:var(--text-light); }
+.interface-card ul li { margin-bottom:4px; }
+
+.tag-ui { background:#e8f0fe; color:#2a5a8c; }
+.tag-feature { background:#fff0f5; color:#b8336a; }
+
+.comparison { overflow-x:auto; }
+.comparison table { width:100%; border-collapse:collapse; font-size:14px; box-shadow:var(--shadow); border-radius:var(--radius); overflow:hidden; }
+.comparison th { background:#1a3a5c; color:#fff; padding:14px 16px; text-align:left; font-weight:600; font-size:13px; }
+.comparison th:first-child { min-width:200px; }
+.comparison td { padding:12px 16px; border-bottom:1px solid var(--border); background:var(--card); }
+.comparison .check { color:#28a745; font-weight:700; }
+.comparison .cross { color:#dc3545; }
+.comparison .partial { color:#f0a020; }
+
+.slogan-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
+.slogan-card { background:linear-gradient(135deg,#f8f9fb,#e8f0fe); border:1px solid var(--border); border-radius:var(--radius); padding:28px 24px; text-align:center; }
+.slogan-card .emoji { font-size:28px; margin-bottom:8px; }
+.slogan-card p { font-size:15px; font-weight:600; color:#1a3a5c; }
+
+.footer { background:#1a3a5c; color:rgba(255,255,255,.7); text-align:center; padding:32px; font-size:13px; }
+.footer strong { color:#fff; }
+
+@media (max-width:600px) { .hero h1 { font-size:28px; } .stats-bar { gap:24px; } .control-bar-row { gap:6px; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>&#x1F4F7; 连续截图工具</h1>
+  <p class="tagline">浮窗取景 &middot; 原生画质 &middot; 异形截图 &middot; 连续快拍</p>
+  <div class="badges">
+    <span class="badge">&#x1F5A5; 原生分辨率</span>
+    <span class="badge">&#x1F504; 截图不消失</span>
+    <span class="badge">&#x2B55; 4种形状</span>
+    <span class="badge">&#x1F5B1; 8向缩放</span>
+    <span class="badge">&#x1F4E6; 绿色免安装</span>
+  </div>
+</header>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">解决什么问题</h2>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="icon">&#x1F624;</div>
+        <h3>系统截图每次都要重框选</h3>
+        <p>Win+Shift+S 截图后窗口消失，截多张相同尺寸区域时反复画框，效率极低。</p>
+      </div>
+      <div class="pain-card">
+        <div class="icon">&#x1F615;</div>
+        <h3>截图模糊不清晰</h3>
+        <p>多数工具使用桌面复制 API 缩略图放大。本工具 GDI 像素级捕获，原生分辨率。</p>
+      </div>
+      <div class="pain-card">
+        <div class="icon">&#x1F914;</div>
+        <h3>没有方便的异形截图</h3>
+        <p>需要圆形/三角形截图只能进 PS 抠图。本工具一键切换，非矩形区域自动透明通道。</p>
+      </div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat"><div class="num">4</div><div class="label">截图形状</div></div>
+      <div class="stat"><div class="num">75MB</div><div class="label">单文件大小</div></div>
+      <div class="stat"><div class="num">&infin;</div><div class="label">连续截图</div></div>
+      <div class="stat"><div class="num">0</div><div class="label">环境依赖</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="positioning">
+  <blockquote><strong>轻量级 Windows 连续截图利器</strong>&mdash;&mdash;固定尺寸取景框，指哪打哪，截图不消失，拍到满意为止。</blockquote>
+</div>
+
+<!-- ===== NAV BAR ===== -->
+<section>
+  <div class="container">
+    <h2 class="section-title">导航栏</h2>
+    <p class="section-subtitle">所有操作集成在一行控制条，零学习成本</p>
+    <div class="control-bar-diagram">
+      <div class="control-bar-row">
+        <div class="control-item shape">&#x25AF;</div>
+        <div class="control-item shape">&#x25CB;</div>
+        <div class="control-item shape">&#x25EF;</div>
+        <div class="control-item shape">&#x25B3;</div>
+        <div class="control-label">W <span>800</span></div>
+        <div class="control-label">H <span>600</span></div>
+        <div class="control-item">选择目录</div>
+        <div class="control-item accent">保存</div>
+        <div class="control-item" style="font-size:11px;color:#888">D:\Screenshots\</div>
+        <div class="control-item" style="font-size:11px;color:#28a745;margin-left:auto">已保存 &#x2713;</div>
+      </div>
+      <div class="breakdown-list">
+        <div class="breakdown-item"><strong>&#x1F532; 形状按钮组</strong><span>&#x25AF; &#x25CB; &#x25EF; &#x25B3; 四种形状一键切换，CSS clip-path 实时预览效果</span></div>
+        <div class="breakdown-item"><strong>&#x1F4D0; W &times; H 输入框</strong><span>手动输入精确像素尺寸，与拖拽双向同步，最小 50px</span></div>
+        <div class="breakdown-item"><strong>&#x1F4C2; 选择目录</strong><span>系统目录选择器，任意文件夹，路径显示在后方</span></div>
+        <div class="breakdown-item"><strong>&#x1F4BE; 保存按钮</strong><span>点击或按 Space 截图，窗口不消失，可连续快拍</span></div>
+        <div class="breakdown-item"><strong>&#x1F4DD; 状态区</strong><span>成功显示绿色文件名，失败显示红色错误，3 秒自动消隐</span></div>
+        <div class="breakdown-item"><strong>&#x23D0; 拖拽把手</strong><span>导航栏整体可拖拽，将取景框移到屏幕任意位置</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INTERFACE ===== -->
+<section>
+  <div class="container">
+    <h2 class="section-title">核心界面</h2>
+    <p class="section-subtitle">浮窗置顶，所见即所得</p>
+    <div class="interface-grid">
+      <div class="interface-card">
+        <div class="icon">&#x2B1C;</div>
+        <span class="tag tag-ui">矩形取景</span>
+        <h3>透明视窗 &middot; 快速路径</h3>
+        <p>默认矩形模式，半透明蓝色取景框悬浮于屏幕内容之上，下方区域清晰可见。控制栏深色一体化，所有控件一排到底。</p>
+        <ul>
+          <li>GDI CopyFromScreen 直接捕获 + nativeImage 裁剪</li>
+          <li>零 Canvas 开销，毫秒级保存</li>
+          <li>自动匹配显示器缩放因子，物理像素级精度</li>
+        </ul>
+      </div>
+      <div class="interface-card">
+        <div class="icon">&#x2B55;</div>
+        <span class="tag tag-feature">异形截图</span>
+        <h3>圆形 / 椭圆 / 三角 &middot; 一键切换</h3>
+        <p>四个形状按钮即时切换取景框外形，CSS clip-path 实时预览。截图时 Canvas 遮罩处理，非形状区域输出透明像素。</p>
+        <ul>
+          <li>圆形：Canvas arc(50%, 50%, min(w,h)/2) clip</li>
+          <li>椭圆：Canvas ellipse(50%, 50%, w/2, h/2) clip</li>
+          <li>三角：Canvas moveTo + lineTo + closePath clip</li>
+          <li>输出 PNG 带透明通道，可直接叠加使用</li>
+        </ul>
+      </div>
+      <div class="interface-card">
+        <div class="icon">&#x1F5B1;</div>
+        <span class="tag tag-ui">自由缩放</span>
+        <h3>8 向拖拽手柄 &middot; 精确取景</h3>
+        <p>四角 &plus; 四边中点共 8 个白色拖拽手柄。W / N 方向拖拽时自动平移窗口位置，保持对边屏幕坐标不变。</p>
+        <ul>
+          <li>8 个方向光标 (nw / n / ne / e / se / s / sw / w)</li>
+          <li>最小限制 50&times;50px，W&times;H 输入框双向同步</li>
+          <li>窗口宽度下限 560px 保证导航栏按钮不挤压</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">核心功能</h2>
+    <div class="feature-grid">
+      <div class="feature-item"><div class="feature-icon">&#x2B1C;</div><h4>矩形快速路径</h4><p>GDI 直接捕获+裁剪，零 Canvas 开销</p></div>
+      <div class="feature-item"><div class="feature-icon">&#x2B55;</div><h4>圆形截图</h4><p>Canvas arc clip，透明 PNG 输出</p></div>
+      <div class="feature-item"><div class="feature-icon">&#x2B2D;</div><h4>椭圆形截图</h4><p>Canvas ellipse clip，椭圆外全透明</p></div>
+      <div class="feature-item"><div class="feature-icon">&#x25B3;</div><h4>三角形截图</h4><p>Canvas polygon clip，三角外全透明</p></div>
+      <div class="feature-item"><div class="feature-icon">&#x1F5B1;</div><h4>8 向拖拽</h4><p>四角+四边中点手柄实时缩放</p></div>
+      <div class="feature-item"><div class="feature-icon">&#x2328;</div><h4>键盘快捷键</h4><p>Space 保存，ESC 退出</p></div>
+      <div class="feature-item"><div class="feature-icon">&#x1F4C2;</div><h4>自定义路径</h4><p>任意文件夹，文件名时间戳</p></div>
+      <div class="feature-item"><div class="feature-icon">&#x1F4E6;</div><h4>绿色免安装</h4><p>单 75MB EXE，复制即用</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">竞品对比</h2>
+    <div class="comparison">
+      <table>
+        <tr><th>功能维度</th><th>本工具</th><th>Snipaste</th><th>Win+Shift+S</th><th>QQ/微信截图</th></tr>
+        <tr><td>固定尺寸连续截</td><td class="check">&#x2713; 核心功能</td><td class="partial">需重复操作</td><td class="cross">&#x2717; 每次消失</td><td class="cross">&#x2717; 每次消失</td></tr>
+        <tr><td>截图后窗口保持</td><td class="check">&#x2713;</td><td class="cross">&#x2717;</td><td class="cross">&#x2717;</td><td class="cross">&#x2717;</td></tr>
+        <tr><td>原生分辨率</td><td class="check">&#x2713; GDI</td><td class="check">&#x2713; DXGI</td><td class="partial">缩放后</td><td class="partial">压缩</td></tr>
+        <tr><td>圆形/椭圆截图</td><td class="check">&#x2713; 透明PNG</td><td class="cross">&#x2717;</td><td class="cross">&#x2717;</td><td class="cross">&#x2717;</td></tr>
+        <tr><td>三角形截图</td><td class="check">&#x2713; 透明PNG</td><td class="cross">&#x2717;</td><td class="cross">&#x2717;</td><td class="cross">&#x2717;</td></tr>
+        <tr><td>8向拖拽缩放</td><td class="check">&#x2713;</td><td class="check">&#x2713;</td><td class="check">&#x2713;</td><td class="check">&#x2713;</td></tr>
+        <tr><td>绿色免安装</td><td class="check">&#x2713; 75MB</td><td class="partial">需安装</td><td class="check">&#x2713; 内置</td><td class="cross">需装IM</td></tr>
+        <tr><td>键盘快捷键</td><td class="check">&#x2713; Space/ESC</td><td class="check">&#x2713; F1等</td><td class="check">&#x2713;</td><td class="check">&#x2713;</td></tr>
+        <tr><td>标注/编辑</td><td class="cross">专注截图</td><td class="check">&#x2713; 强</td><td class="partial">基础</td><td class="check">&#x2713;</td></tr>
+        <tr><td>启动速度</td><td class="check">秒开</td><td class="check">秒开</td><td class="check">秒开</td><td class="cross">需先登IM</td></tr>
+        <tr><td>纯离线</td><td class="check">&#x2713; 无网络</td><td class="check">&#x2713;</td><td class="check">&#x2713;</td><td class="cross">有请求</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">为什么选择它</h2>
+    <div class="slogan-grid">
+      <div class="slogan-card"><div class="emoji">&#x1F3AF;</div><p>固定尺寸，指哪打哪，拍完不走</p></div>
+      <div class="slogan-card"><div class="emoji">&#x1F5BC;</div><p>原生分辨率，每个像素都清晰</p></div>
+      <div class="slogan-card"><div class="emoji">&#x2B55;</div><p>一键切换形状，透明通道输出</p></div>
+      <div class="slogan-card"><div class="emoji">&#x1F4E6;</div><p>单文件 75MB，U盘带着走</p></div>
+      <div class="slogan-card"><div class="emoji">&#x26A1;</div><p>秒开秒存，不捆绑任何软件</p></div>
+      <div class="slogan-card"><div class="emoji">&#x1F193;</div><p>完全免费，无广告，无联网</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <strong>连续截图工具</strong> &copy; 2026 &middot; Windows x64 绿色免安装
+</footer>
+
+</body>
+</html>
